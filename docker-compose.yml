@@ -1,0 +1,62 @@
+version: '3.7'
+
+services:
+
+  test-nextjs:
+    container_name: test-nextjs
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - './app:/opt/app'
+      - '/opt/app/node_modules'
+    ports:
+      - 3003:3000
+    stdin_open: true
+    tty: true
+    #command: ["npm", "run", "s", "--silent"]
+    command: ["npm", "run", "dev"] 
+#    depends_on: 
+#      - node-database
+#
+#  node-server:
+#    container_name: node-server
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.server
+#    volumes:
+#      - './server:/opt/server'
+#      - '/opt/server/node_modules'
+#
+#        #working_dir:  /opt/server
+#    expose:
+#      - 9900
+#    ports:
+#      - 9900:9900
+#    environment:
+#      - PORT=9900
+#      - HOST=0.0.0.0
+#    command: ['npm', 'start']
+#
+#  node-database:
+#    container_name: node-database
+#    image: postgres
+#    ports:
+#      - 5555:5432
+#    volumes:
+#      - './test-db:/var/lib/postrgresql/data'
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#
+#  nginx:    
+#    image: nginx:alpine
+#    container_name: nginx
+#    volumes:
+#      - "./nginx.conf:/etc/nginx/conf.d/default.conf"
+#    ports:
+#      - 8080:80
+#    depends_on:
+#      - test-node
+#      - node-server
+#
