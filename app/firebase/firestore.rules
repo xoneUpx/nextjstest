@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if
+          request.time < timestamp.date(2021, 4, 28);
+    match /posts/{postId} {
+      allow read;
+}
+    match /users/{userId} {
+      allow read;
+      allow create: if isValidUser(userId)
+}
+    match /usernames/{username} {
+      allow read;
+      allow create: if isValidUsername(username)
+}
+    match /users/{userId}/posts/{postId} {
+      allow read;
+      allow create: if canCreatePost(userId);
+      allow update: if canUpdatePost(userId);
+      allow delete: if request.auth.id == userId;
+}
+    function isValidUser(userId) {
+      let isOwner = request.auth.id == userId;
+      let username = request.resource.data.username; 
+      let createdValidUser = existsAfter(/databases/$(database)/documents/usernames/$(username));
+      return isOwner && createdValidUser;
+}
+    function isValidUsername(username) {
+      let isOwner = request.auth.id == request.resource.data.uid;
+      let isValidUserDoc = getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.username = username;
+      return isOwner && isValidUserDoc;
+}
+    function canCreatePost(userId) {
+          let isOwner = request.auth.uid == userId;
+        let isNow = request.time == request.resource.data.createdAt;
+        let username = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username;
+        let usernameMatches = username == request.resource.data.username;
+
+        return isOwner && isNow && usernameMatches;
+      }
+      
+      function canUpdatePost(userId) {
+        let isOwner = request.auth.uid == userId;
+        let isNow = request.time == request.resource.data.updatedAt;
+        let doesNotUpdateForbidden = !request.resource.data.diff(resource.data).affectedKeys().hasAny(['uid', 'username', 'heartCount']);
+        
+        return isOwner && isNow && doesNotUpdateForbidden;
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ COPY /app/package-lock.json ./
 COPY /app/ ./
 RUN npm i 
 
+#nginx image?
 FROM node
 WORKDIR /app
 #COPY --from=build /app/.next /usr/share/nginx/html

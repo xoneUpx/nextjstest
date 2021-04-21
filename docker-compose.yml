@@ -12,6 +12,11 @@ services:
       - '/opt/app/node_modules'
     ports:
       - 3003:3000
+    environment:
+      - DB_HOST= 
+      - DB_CREDENTIALS=
+      - BACKEND_IP=
+      - BACKEND_PORT=
     stdin_open: true
     tty: true
     #command: ["npm", "run", "s", "--silent"]
@@ -19,35 +24,35 @@ services:
 #    depends_on: 
 #      - node-database
 #
-#  node-server:
-#    container_name: node-server
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.server
-#    volumes:
-#      - './server:/opt/server'
-#      - '/opt/server/node_modules'
+  test-backend:
+    container_name: test-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    volumes:
+      - './backend:/opt/backend'
+      - '/opt/backend/node_modules'
 #
 #        #working_dir:  /opt/server
-#    expose:
-#      - 9900
-#    ports:
-#      - 9900:9900
-#    environment:
-#      - PORT=9900
-#      - HOST=0.0.0.0
-#    command: ['npm', 'start']
-#
-#  node-database:
-#    container_name: node-database
-#    image: postgres
-#    ports:
-#      - 5555:5432
-#    volumes:
-#      - './test-db:/var/lib/postrgresql/data'
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 9900
+    ports:
+      - 9900:9900
+    environment:
+      - PORT=9900
+      - HOST_IP=0.0.0.0
+    command: ['nodemon', 'server.js']
+
+  test-database:
+    container_name: test-database
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - './test-db:/data/db'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
 #
 #  nginx:    
 #    image: nginx:alpine
