@@ -13,11 +13,11 @@ services:
     ports:
       - 3003:3000
     environment:
-      - DB_HOST= 
-      - DB_CREDENTIALS=
-      - BACKEND_IP=
-      - BACKEND_PORT=
-      - API_KEY=AIzaSyCzA9fW-aOeTUOPnWrUuUmNEi5UDHz8JKE
+      #- DB_HOST= 
+      #- DB_CREDENTIALS=
+      #- BACKEND_IP=
+      #- BACKEND_PORT=
+      - API_KEY="AIzaSyCzA9fW-aOeTUOPnWrUuUmNEi5UDHz8JKE"
     stdin_open: true
     tty: true
     #command: ["npm", "run", "s", "--silent"]
