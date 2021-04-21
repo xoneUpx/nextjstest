@@ -4,7 +4,7 @@ import 'firebase/storage';
 import 'firebase/firestore';
 
      var firebaseConfig = {
-         apiKey: "AIzaSyCzA9fW-aOeTUOPnWrUuUmNEi5UDHz8JKE",
+         apiKey: process.env.API_KEY,
              authDomain: "nextjs-ff550.firebaseapp.com",
                  projectId: "nextjs-ff550",
                      storageBucket: "nextjs-ff550.appspot.com",
